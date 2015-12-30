@@ -12,13 +12,20 @@ class multiProcessManager {
     private $script_last_modified_time = null;
 
     /**
-     * multiProcessManager constructor.
+     * master_worker constructor.
      *
      * @param string $thread_name
      * @param array  $workers
-     * @param bool   $wait_for_completion
+     * @param bool   $parent_thread_can_continue_execution  - Should we keep allow execution of this script to continue?
+     *                                                          true  = This script will continue running whilst the workers are still being processed
+     *                                                          false = This script will halt execution at this point until the workers have completed and then execution will
+     *                                                                  continue as normal
+     *
+     *                                                          Regardless of the value specified here, we will keep the child processes running until completion (unless a fatal
+     *                                                          error occurs).
+     *
      */
-    public function __construct(string $thread_name, array $workers, bool $wait_for_completion = true) {
+    public function __construct(string $thread_name, array $workers, bool $parent_thread_can_continue_execution = true) {
         $this->setThreadName($thread_name);
 
         $this->workers = $workers;
@@ -26,7 +33,7 @@ class multiProcessManager {
         // Start our workers running
         $this->init();
 
-        if ($wait_for_completion) {
+        if (!$parent_thread_can_continue_execution) {
             $this->doWaitForWorkersToComplete();
         }
     }
@@ -167,6 +174,8 @@ class multiProcessManager {
      *
      */
     public function __destruct() {
+        $this->doWaitForWorkersToComplete();
+
         $this->terminateChildThreads();
     }
 }
