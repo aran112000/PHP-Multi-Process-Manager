@@ -3,12 +3,12 @@ This is a very lightweight but powerful wrapper allowing for background, multi-t
 
 ## Requirements
  - PHP 7.0.0+
- - PHP's `pcnlt` library installed (For installation instruction, please see: http://php.net/manual/en/pcntl.installation.php)
+ - PHP's `pcntl` library installed (For installation instruction, please see: http://php.net/manual/en/pcntl.installation.php)
  - Running within on a Unix platform (Redhat, CentOS, Ubuntu, BSD...)
  - Scripts to be ran from CLI (this is a requirement of `pcntl`)
 
 ## Basic example
-```
+```php
 <?php
 require('multiProcessManager.php');
 
