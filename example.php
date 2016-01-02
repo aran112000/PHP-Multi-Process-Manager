@@ -3,22 +3,25 @@
 require('multiProcessManager.php');
 
 $feeds = [
-    'https://fakeurl.com/feed.xml',
-    'https://fakeurl.com/feed.csv',
-    'https://fakeurl.com/feed.json'
+    'http://www.google.co.uk/sitemap.xml',
+    'http://www.ask.com/sitemap.xml',
+    'http://www.bbc.co.uk/sitemap.xml'
 ];
 
 // Workers will need to contain an array of callables
 $workers = [];
 
-foreach ($feeds as $feed) {
+foreach ($feeds as $feed_url) {
     // Add our callables to $workers - Each entry in this array will have its own worker thread for processing
-    $workers[] = function(string $feed_url): bool {
+    $workers[] = function() use ($feed_url) {
         // TODO: Please your logic for each of the workers to execute here
-
         // Example...
+        echo 'Fetching feed: ' . $feed_url . "\n";
+        
         if ($feed_contents = file_get_contents($feed_url)) {
-            // Log to DB, file or output to screen. As this is only a basic example, we won't bother doing so here.
+            // TODO: Log to DB, file or output to screen
+            $lines = explode("\n", $feed_contents, 2);
+            echo 'Line 1 of response from ' . $feed_url . ':'."\n".$lines[0]."\n";
         }
     };
 }
