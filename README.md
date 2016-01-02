@@ -19,8 +19,8 @@ $feeds = [
 ];
 
 $workers = []; // Workers will need to contain callables (see example below)
-foreach ($feeds as $feed) {
-    $workers[] = function(string $feed_url): bool {
+foreach ($feeds as $feed_url) {
+    $workers[] = function() use ($feed_url) {
         if ($feed_contents = file_get_contents($feed_url)) {
             // Log to DB, file or output to screen. As this is only a basic example, we won't bother doing so here.
         }
